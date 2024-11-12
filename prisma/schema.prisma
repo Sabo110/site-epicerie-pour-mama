@@ -9,7 +9,79 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement()) // clé primaire de type nombre avec autoincrémentation
+  slug      String   @unique // slug unique pour l'URL ou l'identifiant
+  name      String   @unique // nom de la catégorie, unique
+  visible   Boolean // champ visible 
+  createdAt DateTime @default(now()) // date de création, valeur par défaut actuelle
+  updatedAt DateTime @updatedAt
+
+  subCategories SubCategory[] // relation one-to-many avec SubCategory
+}
+
+model SubCategory {
+  id             Int      @id @default(autoincrement()) // clé primaire de type nombre avec autoincrémentation
+  slug           String   @unique // slug unique pour l'URL ou l'identifiant
+  name           String   @unique // nom de la sous-catégorie, unique
+  visible        Boolean // champ visible avec une valeur par défaut de true
+  bannerImageUrl String? // champ optionnel pour l'URL de l'image
+  createdAt      DateTime @default(now()) // date de création, valeur par défaut actuelle
+  updatedAt      DateTime @updatedAt
+
+  // Relation many-to-one avec Category
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  // Relation one-to-many avec SubSubCategory
+  subSubCategories SubSubCategory[]
+
+  products Product[]   // relation one-to-many avec Product
+}
+
+model SubSubCategory {
+  id             Int      @id @default(autoincrement()) // clé primaire de type nombre avec autoincrémentation
+  slug           String   @unique // slug unique pour l'URL ou l'identifiant
+  name           String   @unique // nom de la sous-sous-catégorie, unique
+  visible        Boolean // champ visible avec une valeur par défaut de true
+  bannerImageUrl String // champ optionnel pour l'URL de l'image (bannière)
+  createdAt      DateTime @default(now()) // date de création, valeur par défaut actuelle
+  updatedAt      DateTime @updatedAt
+
+  // Relation many-to-one avec SubCategory
+  subCategoryId Int
+  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
+
+  products         Product[] 
+}
+
+model Product {
+  id            Int       @id @default(autoincrement()) // clé primaire avec autoincrémentation
+  name          String    @unique // nom du produit
+  slug          String    @unique // slug unique pour l'identifiant dans les URL
+  description   String // description optionnelle du produit
+  imageUrl      String // URL de l'image principale du produit
+  price         Int // prix du produit
+  isFeatured    Boolean // pour savoir si le produit est un produit phare
+  isOnSale      Boolean // pour savoir si le produit est en promotion
+  salePrice     Int? // prix de promotion (optionnel)
+  saleStartDate DateTime? // date de début de la promotion (optionnel)
+  saleEndDate   DateTime? // date de fin de la promotion (optionnel)
+  stockQuantity Int? // quantité en stock (optionnel)
+  isNew         Boolean // pour savoir si le produit est nouveau
+  visible       Boolean // pour indiquer si le produit est visible ou non
+  createdAt     DateTime  @default(now()) // date de création, valeur par défaut actuelle
+  updatedAt     DateTime  @updatedAt
+
+  // Relations optionnelles avec SubCategory et SubSubCategory
+  subCategoryId    Int?                                                // clé étrangère vers SubCategory
+  subCategory      SubCategory?      @relation(fields: [subCategoryId], references: [id])
+
+  subSubCategoryId Int?                                                // clé étrangère vers SubSubCategory
+  subSubCategory   SubSubCategory?   @relation(fields: [subSubCategoryId], references: [id])
 }
