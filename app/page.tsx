@@ -1,10 +1,9 @@
-import { BannerImage } from "@/components/BannerImage";
-import imf from "@/public/epiceriebaniere.png"
+import { SearchBar } from "@/components/SearchBar";
 
 export default function Home() {
   return (
-    <div className="h-[400px] w-[900px] mx-auto">
-      <BannerImage image={imf} />
-      </div>
+    <div className="p-4">
+      <SearchBar className="w-64"/>
+    </div>
   );
 }
