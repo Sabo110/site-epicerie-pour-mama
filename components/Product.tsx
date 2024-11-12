@@ -8,13 +8,13 @@ type Props = {
 }
 export const Product = ({ product }: Props) => {
     return (
-        <div>
-            <div className='w-44 h-44  border-4 border-black'>
+        <div className='border-2 border-red-700'>
+            <div className='md:w-44 md:h-44 w-56 h-56  border-4 border-black mx-auto'>
                 <BannerImage image={product.image}/>
             </div>
-            <div>
+            <div className='text-center'>
                 <h5> {product.name} </h5>
-                <p className='text-center'> {product.price} </p>
+                <p> {product.price} </p>
             </div>
         </div>
     )
