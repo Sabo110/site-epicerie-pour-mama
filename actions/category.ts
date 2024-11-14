@@ -1,7 +1,7 @@
 "use server"
 
 import prisma from "@/db"
-import { CreateC } from "../app/types/category"
+import { CreateC } from "../types/category"
 import { Prisma } from "@prisma/client"
 
 //creons une categorie

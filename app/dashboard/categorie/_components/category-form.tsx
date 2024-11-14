@@ -3,7 +3,7 @@
 import React from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { categoryFormSchema } from '@/app/schemas/category'
+import { categoryFormSchema } from '@/schemas/category'
 import { z } from "zod"
 import { useCategoryFormIsVisible } from '@/app/store'
 import { useCategory } from '@/app/store'
@@ -16,7 +16,7 @@ import { InputField } from '../../_components/input-field'
 import { VisibleField } from '../../_components/visible-field'
 import { BtnSubmit } from '../../_components/btn-submit'
 import { BtnCancel } from '../../_components/btn-cancel'
-import { C, CreateC } from '@/app/types/category'
+import { C, CreateC } from '@/types/category'
 import { showSuccessMessage } from '@/lib/show-message'
 
 export const CategoryForm = () => {
@@ -77,7 +77,6 @@ export const CategoryForm = () => {
           <BtnSubmit label={category ? 'Modifier': 'Créer'} isPending={(createM.isPending || updateM.isPending)} />
           <BtnCancel setVisible={() => setVisible(false)} />
         </div>
-        <p> {category?.name} </p>
       </form>
     </Form>
   )

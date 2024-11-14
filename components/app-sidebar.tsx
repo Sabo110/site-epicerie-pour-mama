@@ -62,8 +62,8 @@ const data = {
           url: "/dashboard/categorie",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "sous-catégorie",
+          url: "/dashboard/categorie",
         },
         {
           title: "Settings",

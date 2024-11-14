@@ -1,5 +1,7 @@
 import { create } from 'zustand'
-import { C } from './types/category'
+import { C } from '../types/category'
+import { SC } from '@/types/subCategory'
+
 
 type visibleCategoryForm = {
   categoryFormIsVisible: boolean
@@ -20,4 +22,18 @@ type categoryUpdate = {
 export const useCategory = create<categoryUpdate>((set) => ({
   category: undefined,
   setCategory: (category) => set({category})
+}))
+
+
+type subCategory = {
+  formVisible: boolean
+  setFormVisible: (visible: boolean) => void
+  subCategory: SC | undefined
+  setSubCategory: (subCategory: SC | undefined) => void
+}
+export const useSubcategory = create<subCategory>((set) => ({
+  formVisible: false,
+  setFormVisible: (visible) => set({formVisible: visible}),
+  subCategory: undefined,
+  setSubCategory: (subCategory) => set({subCategory})
 }))

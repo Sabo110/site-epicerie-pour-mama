@@ -20,7 +20,4 @@ export function formatDate(date: Date | string): string {
     }).format(dateObj);
   }
   
-  // Exemple d'utilisation
-  const formattedDate = formatDate("2024-09-03");
-  console.log(formattedDate); // "3 septembre 2024"
   

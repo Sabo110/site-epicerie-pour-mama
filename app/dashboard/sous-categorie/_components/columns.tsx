@@ -2,7 +2,7 @@
 import React from "react"
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
-import { C } from "@/types/category"
+import { SC } from "@/types/subCategory"
 import { formatDate } from "@/lib/format-date"
 
 import { Button } from "@/components/ui/button"
@@ -15,13 +15,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
-import { useCategory, useCategoryFormIsVisible } from "@/app/store"
+import { useCategory, useCategoryFormIsVisible, useSubcategory } from "@/app/store"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { deleteC } from "@/actions/category"
+import { deleteSC } from "@/actions/subCategory"
 import { showErrorMessage, showSuccessMessage } from "@/lib/show-message"
 import { DialogDelete } from "../../_components/DialogDelete"
 
-export const columns: ColumnDef<C>[] = [
+export const columns: ColumnDef<SC>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -57,27 +57,27 @@ export const columns: ColumnDef<C>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-            const category = row.original
-            const setCategory = useCategory((state) => state.setCategory)
-            const setVisible = useCategoryFormIsVisible((state) => state.setVisible)
+            const subCategory = row.original
+            const setSubCategory = useSubcategory((state) => state.setSubCategory)
+            const setFormVisible = useSubcategory((state) => state.setFormVisible)
             const [open, setOpen] = React.useState(false)
             const queryClient = useQueryClient()
             const mutation = useMutation({
-                mutationFn: () => deleteC([category.id]),
+                mutationFn: () => deleteSC([subCategory.id]),
                 onSuccess: (data) => {
-                    queryClient.invalidateQueries({ queryKey: ['categories'] })
+                    queryClient.invalidateQueries({ queryKey: ['subCategories'] })
                     setOpen(false)
                     showSuccessMessage(data.message)
                 },
                 onError: (error) => {
-                    queryClient.invalidateQueries({ queryKey: ['categories'] })
+                    queryClient.invalidateQueries({ queryKey: ['subCategories'] })
                     setOpen(false)
                     showErrorMessage(error.message)
                 }
             })
             return (
                 <>
-                    <DialogDelete title={"Voulez-vous supprimer cette catégorie ? " + category.name} isPending={mutation.isPending} open={open} onOpenChange={setOpen} onClick={() => mutation.mutate()} />
+                    <DialogDelete title={"Voulez-vous supprimer cette sous-catégorie ? " + subCategory.name} isPending={mutation.isPending} open={open} onOpenChange={setOpen} onClick={() => mutation.mutate()} />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -89,8 +89,8 @@ export const columns: ColumnDef<C>[] = [
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => {
-                                setCategory(category)
-                                setVisible(true)
+                                setSubCategory(subCategory)
+                                setFormVisible(true)
                             }}>Modifier</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => {
                                 setOpen(true)
