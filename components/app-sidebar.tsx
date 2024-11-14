@@ -66,8 +66,8 @@ const data = {
           url: "/dashboard/categorie",
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "sous-sous-catégorie",
+          url: "/dashboard/sous-sous-categorie",
         },
       ],
     },
