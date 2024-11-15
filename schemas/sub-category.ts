@@ -7,7 +7,7 @@ export const subCategoryFormSchema = z.object({
   bannerImageFile: z.instanceof(File, {message: "Obligatoire"})
   .refine((file) => file.size < 307200 , "Le fichier ne doit pas dépasser 300ko")
   .refine((file) => ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type), "Les formats acceptés sont: png, jpeg ou jpg")
-  .refine( async (file) => await getDimensionsBanner(file)  , "Les dimensions requis sont 1080x350px")
+  .refine( async (file) => await getDimensionsBanner(file, 1080, 350)  , "Les dimensions requis sont 1080x350px")
   .optional(),
   categoryId: z.number({required_error: "Champ obligatoire"})
 })

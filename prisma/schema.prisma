@@ -75,6 +75,7 @@ model Product {
   stockQuantity Int? // quantité en stock (optionnel)
   isNew         Boolean // pour savoir si le produit est nouveau
   visible       Boolean // pour indiquer si le produit est visible ou non
+  packeding     Boolean
   createdAt     DateTime  @default(now()) // date de création, valeur par défaut actuelle
   updatedAt     DateTime  @updatedAt
 

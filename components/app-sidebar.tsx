@@ -69,6 +69,10 @@ const data = {
           title: "sous-sous-catégorie",
           url: "/dashboard/sous-sous-categorie",
         },
+        {
+          title: "Produit",
+          url: "/dashboard/produit",
+        },
       ],
     },
     {
