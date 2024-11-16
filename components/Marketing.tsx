@@ -1,18 +1,25 @@
+
 import React from 'react'
+import { BannerImage } from './BannerImage'
+import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 
 type Props = {
+  object: {
     title: string,
     text: string,
-    icon: React.ReactNode
+    icon: StaticImport
+  }
 }
-export const Marketing = ({title, text, icon}: Props) => {
+export const Marketing = ({ object }: Props) => {
   return (
     <div>
-        <span> {icon} </span>
-        <h4> {title} </h4>
-        <p>
-            {text}
-        </p>
+      <div className='w-28 h-28'>
+        <BannerImage image={object.icon} />
+      </div>
+      <h4> {object.title} </h4>
+      <p className='text-justify'>
+        {object.text}
+      </p>
     </div>
   )
 }

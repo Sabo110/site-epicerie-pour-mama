@@ -35,6 +35,18 @@ export async function getAllP() {
             },
             where: {
                 visible: true
+            },
+            include: {
+                subCategory: {
+                    include: {
+                        products: true
+                    }
+                },
+                subSubCategory: {
+                    include: {
+                        products: true
+                    }
+                }
             }
         })
         return result
@@ -100,5 +112,41 @@ export async function deleteP(ids: number[]) {
         return { message: 'Suppression effectuée avec succès' }
     } catch (error) {
         throw new Error("Erreur interne du serveur")
+    }
+}
+
+//recuperer un seul produit
+export async function getOP(slug: string) {
+    try {
+        const result = await prisma.product.findUniqueOrThrow({
+            where: {
+                slug
+            },
+            include: {
+                subCategory: {
+                    include: {
+                        products: {
+                            include: {
+                                subCategory:true,
+                                subSubCategory: true
+                            }
+                        }
+                    }
+                },
+                subSubCategory: {
+                    include: {
+                        products: {
+                            include: {
+                                subCategory:true,
+                                subSubCategory: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        return result
+    } catch (error) {
+        throw new Error('Erreur interne du serveur')
     }
 }

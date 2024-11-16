@@ -1,9 +1,10 @@
 import React from 'react'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import { Product } from './Product'
+import { P } from '@/types/product'
 
 type Props = {
-    products: { name: string, image: string | StaticImport, price: number }[]
+    products: P[]
 }
 export const Products = ({ products }: Props) => {
   return (

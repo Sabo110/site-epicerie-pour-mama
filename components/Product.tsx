@@ -1,20 +1,28 @@
-import { StaticImport } from 'next/dist/shared/lib/get-img-props'
-import Image from 'next/image'
+"use client"
+
 import React from 'react'
 import { BannerImage } from './BannerImage'
+import { P } from '@/types/product'
+import Link from 'next/link'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { Button } from './ui/button'
 
 type Props = {
-    product: { name: string, image: string | StaticImport, price: number }
+    product: P
 }
 export const Product = ({ product }: Props) => {
+    const baseUrl = "https://res.cloudinary.com/dilxbtgss/image/upload/v1731642136/"
+    const router = useRouter()
     return (
-        <div className='border-2 border-red-700'>
-            <div className='md:w-44 md:h-44 w-56 h-56  border-4 border-black mx-auto'>
-                <BannerImage image={product.image}/>
+        <div className=''>
+            <div className='md:w-44 md:h-44 w-56 h-56 mx-auto'>
+                <Image src={baseUrl + product.imageUrl} alt='image du produit' width={100} height={100} className='object-fill w-full h-full rounded-full' />
             </div>
-            <div className='text-center'>
-                <h5> {product.name} </h5>
-                <p> {product.price} </p>
+            <div className='text-center flex flex-col mt-2 space-y-2'>
+                <h6> {product.name} </h6>
+                <span> {product.price} FCFA </span>
+                <Button variant={"outline"} onClick={() => router.push('/produit/' + product.slug)}>Voir le produit</Button>
             </div>
         </div>
     )

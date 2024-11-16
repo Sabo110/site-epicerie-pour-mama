@@ -1,3 +1,6 @@
+import { SC } from "./subCategory"
+import { SSC } from "./subSubCategory"
+
 export type CreateP = {
     name: string
     slug: string
@@ -37,4 +40,6 @@ export type P = {
     subSubCategoryId: number | null
     createdAt: Date
     updatedAt: Date
+    subCategory: SC | null
+    subSubCategory: SSC | null
 }

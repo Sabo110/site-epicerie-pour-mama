@@ -6,9 +6,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.app.goo.gl',
-        port: '',
-        pathname: '/**',
+        hostname: 'res.cloudinary.com',
+        pathname: '/dilxbtgss/**', // Remplace par ton sous-domaine Cloudinary
       },
     ],
   },
