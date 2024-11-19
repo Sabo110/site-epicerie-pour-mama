@@ -63,7 +63,7 @@ const data = {
         },
         {
           title: "sous-catégorie",
-          url: "/dashboard/categorie",
+          url: "/dashboard/sous-categorie",
         },
         {
           title: "sous-sous-catégorie",

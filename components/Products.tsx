@@ -1,5 +1,4 @@
 import React from 'react'
-import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import { Product } from './Product'
 import { P } from '@/types/product'
 

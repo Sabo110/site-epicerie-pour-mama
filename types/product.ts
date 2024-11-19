@@ -5,6 +5,7 @@ export type CreateP = {
     name: string
     slug: string
     description: string
+    ingredients: string
     imageUrl: string
     price: number
     isFeatured: boolean
@@ -12,7 +13,7 @@ export type CreateP = {
     salePrice?: number 
     saleStartDate?: Date
     saleEndDate?: Date
-    stockQuantity?: number
+    stockQuantity: number
     isNew: boolean
     packeding: boolean
     visible: boolean
@@ -25,6 +26,7 @@ export type P = {
     name: string
     slug: string
     description: string
+    ingredients: string
     imageUrl: string
     price: number
     isFeatured: boolean

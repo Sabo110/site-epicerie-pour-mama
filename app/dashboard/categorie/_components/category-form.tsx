@@ -3,7 +3,7 @@
 import React from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { categoryFormSchema } from '@/schemas/category'
+import { categoryFormSchema, categoryFormSchemaUpdate } from '@/schemas/category'
 import { z } from "zod"
 import { useCategoryFormIsVisible } from '@/app/store'
 import { useCategory } from '@/app/store'
@@ -16,8 +16,9 @@ import { InputField } from '../../_components/input-field'
 import { VisibleField } from '../../_components/visible-field'
 import { BtnSubmit } from '../../_components/btn-submit'
 import { BtnCancel } from '../../_components/btn-cancel'
-import { C, CreateC } from '@/types/category'
+import { CreateC } from '@/types/category'
 import { showSuccessMessage } from '@/lib/show-message'
+import { FileUploader } from '../../_components/file-uploader'
 
 export const CategoryForm = () => {
   const setVisible = useCategoryFormIsVisible((state) => state.setVisible)
@@ -25,7 +26,7 @@ export const CategoryForm = () => {
   const queryClient = useQueryClient()
   //mutation de creation
   const createM = useMutation({
-    mutationFn: (data: CreateC) => createC(data),
+    mutationFn: (data: {data: CreateC, imageFile: File}) => createC(data.data, data.imageFile),
     onSuccess: (data) => {
       queryClient.invalidateQueries({queryKey: ['categories']})
       showSuccessMessage(data.message)
@@ -34,7 +35,7 @@ export const CategoryForm = () => {
   })
   //mutation de mise a jour
   const updateM = useMutation({
-    mutationFn: (data: CreateC) => updateC(data, category?.id!),
+    mutationFn: (data: {data: CreateC, imageFile?: File, public_id?: string}) => updateC(data.data, category?.id!, data.imageFile, data.public_id),
     onSuccess: (data) => {
       queryClient.invalidateQueries({queryKey: ['categories']})
       showSuccessMessage(data.message)
@@ -45,7 +46,7 @@ export const CategoryForm = () => {
   type formSchema = z.infer<typeof categoryFormSchema>
   // 1. Define your form.
   const form = useForm<formSchema>({
-    resolver: zodResolver(categoryFormSchema),
+    resolver: zodResolver(!category ? categoryFormSchema : categoryFormSchemaUpdate),
     defaultValues: category ? {
       name: category.name,
       visible: category.visible
@@ -64,14 +65,29 @@ export const CategoryForm = () => {
   function onSubmit(values: formSchema) {
     //on genere le slug
     const slug = slugify(values.name);
+    //on extrait le les donnees du formulaire sans le fichier image
+    const {imageFile, ...data} = values
+    if (!category) {
+      createM.mutate({
+        data: {...data, ['slug']: slug},
+        imageFile: imageFile
+      })
+    } else {
+      updateM.mutate({
+        data: {...data, ['slug']: slug},
+        imageFile: imageFile,
+        public_id: category.imageUrl
+      })
+    }
     console.log(values)
-    createM.mutate({...values, ['slug']: slug})
+    
   }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <p className='text-red-400 my-2'> {createM.error ? createM.error.message : updateM.error ? updateM.error.message : null} </p>
         <InputField name='name' placeholder='Entrer le nom de la catégorie' control={form.control} label='Nom de la catégorie' />
+        <FileUploader control={form.control} name='imageFile' label='Image de bannière'/>
         <VisibleField control={form.control} name='visible' label='Visible' />
         <div className='flex items-center gap-4'>
           <BtnSubmit label={category ? 'Modifier': 'Créer'} isPending={(createM.isPending || updateM.isPending)} />

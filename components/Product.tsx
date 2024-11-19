@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from './ui/button'
+import { cn } from '@/lib/utils'
 
 type Props = {
     product: P
@@ -19,9 +20,10 @@ export const Product = ({ product }: Props) => {
             <div className='md:w-44 md:h-44 w-56 h-56 mx-auto'>
                 <Image src={baseUrl + product.imageUrl} alt='image du produit' width={100} height={100} className='object-fill w-full h-full rounded-full' />
             </div>
-            <div className='text-center flex flex-col mt-2 space-y-2'>
+            <div className='text-center mt-2 space-y-2'>
                 <h6> {product.name} </h6>
-                <span> {product.price} FCFA </span>
+                <span className={cn('block',  product.salePrice ? 'line-through' :  "")}> {product.price} FCFA </span>
+                {product.salePrice ? <span> {product.salePrice} FCFA </span> : null}
                 <Button variant={"outline"} onClick={() => router.push('/produit/' + product.slug)}>Voir le produit</Button>
             </div>
         </div>

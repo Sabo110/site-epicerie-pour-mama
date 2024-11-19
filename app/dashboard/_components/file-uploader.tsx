@@ -37,7 +37,6 @@ export function FileUploader<T extends FieldValues>({
                         <div>
                             <Input type='file' ref={input} className='hidden' accept='image/png, image/jpeg, image/jpg'
                                 onChange={(e) => {
-                                    console.log(e.target.files);
                                     field.onChange(e.target.files?.[0])
                                     setFile(e.target.files?.[0])
                                 }}

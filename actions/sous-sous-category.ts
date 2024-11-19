@@ -6,12 +6,8 @@ import { Prisma } from "@prisma/client"
 import { imageUploader, deleteImage } from "@/lib/file-uploader"
 
 // Création d'une sous-sous-catégorie
-export async function createSSC(data: CreateSSC, bannerImageFile: File) {
+export async function createSSC(data: CreateSSC) {
     try {
-        // Téléchargement de l'image sur Cloudinary
-        const result = await imageUploader(bannerImageFile, "banières-des-sous-sous-categories")
-        // Assignation du public_id comme URL de la bannière
-        data.bannerImageUrl = result.publicId
         await prisma.subSubCategory.create({
             data
         })
@@ -44,16 +40,8 @@ export async function getAllSSC() {
 }
 
 // Mise à jour d'une sous-sous-catégorie
-export async function updateSSC(data: CreateSSC, id: number, bannerImageFile?: File) {
+export async function updateSSC(data: CreateSSC, id: number) {
     try {
-        if (bannerImageFile) {
-            // Suppression de l'ancienne image si elle existe
-            await deleteImage(data.bannerImageUrl)
-            // Téléchargement de la nouvelle image
-            const result = await imageUploader(bannerImageFile, "banières-des-sous-sous-categories")
-            // Mise à jour du bannerImageUrl avec le public_id de la nouvelle image
-            data.bannerImageUrl = result.publicId
-        }
         await prisma.subSubCategory.update({
             data,
             where: { id }
@@ -72,21 +60,6 @@ export async function updateSSC(data: CreateSSC, id: number, bannerImageFile?: F
 // Suppression d'une ou plusieurs sous-sous-catégories
 export async function deleteSSC(ids: number[]) {
     try {
-        // Récupération des enregistrements à supprimer
-        const res = await prisma.subSubCategory.findMany({
-            where: {
-                id: {
-                    in: ids
-                }
-            },
-            select: {
-                bannerImageUrl: true
-            }
-        })
-        // Création d'un tableau de public_ids pour les supprimer de Cloudinary
-        const public_ids = res.map(object => object.bannerImageUrl) as string[]
-        // Suppression des images associées sur Cloudinary
-        await deleteImage(undefined, public_ids)
         const result = await prisma.subSubCategory.deleteMany({
             where: {
                 id: {
@@ -98,6 +71,28 @@ export async function deleteSSC(ids: number[]) {
             throw new Error("Aucune sous-sous-catégorie trouvée pour suppression")
         }
         return { message: 'Suppression effectuée avec succès' }
+    } catch (error) {
+        throw new Error("Erreur interne du serveur")
+    }
+}
+
+//recuperer une seule sous sous categorie
+export async function getOSSC(slug: string) {
+    try {
+        const result = await prisma.subSubCategory.findUniqueOrThrow({
+            where: {
+                slug
+            },
+            include: {
+                products: {
+                    include: {
+                        subCategory: true,
+                        subSubCategory: true
+                    }
+                }
+            }
+        })
+        return result
     } catch (error) {
         throw new Error("Erreur interne du serveur")
     }

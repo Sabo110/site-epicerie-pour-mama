@@ -16,7 +16,6 @@ import { SelectField } from "../../_components/select-field"
 import { BtnSubmit } from "../../_components/btn-submit"
 import { BtnCancel } from "../../_components/btn-cancel"
 import { useSubcategory } from "@/app/store"
-import { FileUploader } from "../../_components/file-uploader"
 import { createSC, updateSC } from "@/actions/subCategory"
 import { CreateSC } from "@/types/subCategory"
 import { showSuccessMessage } from "@/lib/show-message"
@@ -33,7 +32,7 @@ export const SubCategoryForm = () => {
   })
   //mutation de création
   const createM = useMutation({
-    mutationFn: (data: { data: CreateSC, bannerImageFile?: File }) => createSC(data.data, data.bannerImageFile),
+    mutationFn: (data: CreateSC) => createSC(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({queryKey: ['subCategories']})
       setFormVisible(false)
@@ -42,7 +41,7 @@ export const SubCategoryForm = () => {
   })
   //mutation de mise a jour
   const updateM = useMutation({
-    mutationFn: (data: { data: CreateSC, bannerImageFile?: File }) => updateSC(data.data, subCategory?.id!, data.bannerImageFile),
+    mutationFn: (data: CreateSC) => updateSC(data, subCategory?.id!),
     onSuccess: (data) => {
       queryClient.invalidateQueries({queryKey: ['subCategories']})
       setFormVisible(false)
@@ -69,18 +68,11 @@ export const SubCategoryForm = () => {
   }, [subCategory])
   // 2. Define a submit handler.
   function onSubmit(values: formSchema) {
-    //on recupere le fichier image de la baniere
-    const { bannerImageFile, ...data } = values
+    const slug = slugify(values.name)
     if (!subCategory) {
-      createM.mutate({
-        data: { ...data, ['slug']: slugify(data.name) },
-        bannerImageFile
-      })
+      createM.mutate({...values, ['slug']: slug})
     } else {
-      updateM.mutate({
-        data: { ...data, ['slug']: slugify(data.name) },
-        bannerImageFile
-      })
+      updateM.mutate({...values, ['slug']: slug})
     }
     console.log(values)
   }
@@ -89,7 +81,6 @@ export const SubCategoryForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
       <p className='text-red-400 my-2'> {createM.error ? createM.error.message : updateM.error ? updateM.error.message : null} </p>
         <InputField name="name" control={form.control} label="Nom de la sous-catégorie" placeholder="Entrer le nom de la sous-catégorie" />
-        <FileUploader control={form.control} name="bannerImageFile" label="Sélectionner la banière" />
         <VisibleField name="visible" label="Visible" control={form.control} />
         <SelectField control={form.control} name="categoryId" label="Catégorie" options={data} isPending={isPending} valueKey="id" labelKey="name" placeholder="Sélectionner une catégorie" />
         <div className="flex items-center gap-3">

@@ -8,6 +8,7 @@ export type C = {
     id: number
     slug: string
     name: string
+    imageUrl: string
     visible: boolean
     createdAt: Date
     updatedAt: Date

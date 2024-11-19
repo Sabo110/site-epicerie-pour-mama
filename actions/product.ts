@@ -7,9 +7,13 @@ import { imageUploader, deleteImage } from "@/lib/file-uploader"
 
 // Création d'un produit
 export async function createP(data: CreateP, imageFile: File) {
+    let successUpload = false
+    let pi = ""
     try {
         // Télécharge l'image sur Cloudinary
         const result = await imageUploader(imageFile, "images-des-produits")
+        successUpload = true
+        pi = result.publicId
         // Assigne le public_id au champ imageUrl
         data.imageUrl = result.publicId
         await prisma.product.create({
@@ -17,6 +21,13 @@ export async function createP(data: CreateP, imageFile: File) {
         })
         return { message: 'Produit créé avec succès !' }
     } catch (error) {
+        //si l'image a bien ete telecharger , donc l'erreur provient surement de notre bd
+        if (successUpload) {
+            //on supprime l'image telecharge
+            await deleteImage(pi)
+            console.log("cue");
+            
+        }
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002") {
                 throw new Error('Un produit avec ce nom existe déjà')
@@ -57,12 +68,16 @@ export async function getAllP() {
 
 // Mise à jour d'un produit
 export async function updateP(data: CreateP, id: number, imageFile?: File) {
+    let successUpload = false
+    let pi = ""
     try {
         if (imageFile) {
             // Supprime l'ancienne image
             await deleteImage(data.imageUrl) // en utilisant le public_id actuel
             // Télécharge la nouvelle image sur Cloudinary
             const result = await imageUploader(imageFile, "images-des-produits")
+            successUpload = true
+            pi = result.publicId
             // Met à jour imageUrl avec le public_id de la nouvelle image
             data.imageUrl = result.publicId
         }
@@ -72,6 +87,9 @@ export async function updateP(data: CreateP, id: number, imageFile?: File) {
         })
         return { message: 'Mise à jour effectuée avec succès !' }
     } catch (error) {
+        if (successUpload) {
+            await deleteImage(pi)
+        }
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002") {
                 throw new Error("Un produit avec ce nom existe déjà")
@@ -130,7 +148,8 @@ export async function getOP(slug: string) {
                                 subCategory:true,
                                 subSubCategory: true
                             }
-                        }
+                        },
+                        category: true
                     }
                 },
                 subSubCategory: {
@@ -139,6 +158,11 @@ export async function getOP(slug: string) {
                             include: {
                                 subCategory:true,
                                 subSubCategory: true
+                            }
+                        },
+                        subCategory: {
+                            include: {
+                                category: true
                             }
                         }
                     }

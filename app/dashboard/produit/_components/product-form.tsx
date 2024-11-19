@@ -10,7 +10,16 @@ import { getAllSC } from "@/actions/subCategory"
 import { getAllSSC } from "@/actions/sous-sous-category"
 import slugify from 'react-slugify';
 
-import { Form, } from "@/components/ui/form"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import { Form, FormControl, } from "@/components/ui/form"
 import { InputField } from "../../_components/input-field"
 import { VisibleField } from "../../_components/visible-field"
 import { SelectField } from "../../_components/select-field"
@@ -25,6 +34,7 @@ import { TextAreaField } from "../../_components/text-area-field"
 import { DateField } from "../../_components/date-field"
 import { Button } from "@/components/ui/button"
 import { UndoIcon } from "lucide-react"
+import { TagsInpute } from "../../_components/tags-input"
 
 export const ProductForm = () => {
   const queryClient = useQueryClient()
@@ -65,6 +75,7 @@ export const ProductForm = () => {
     defaultValues: product ? {
       name: product.name,
       description: product.description,
+      ingredients: product.ingredients.split(","),
       price: product.price,
       visible: product.visible,
       isFeatured: product.isFeatured,
@@ -76,46 +87,57 @@ export const ProductForm = () => {
       saleEndDate: product.saleEndDate ? product.saleEndDate : undefined,
       subCategoryId: product.subCategoryId ? product.subCategoryId : undefined,
       subSubCategoryId: product.subSubCategoryId ? product.subSubCategoryId : undefined,
-      stockQuantity: product.stockQuantity ? product.stockQuantity : undefined
+      stockQuantity: product.stockQuantity ? product.stockQuantity : 0
     } : {
       name: "",
       description: "",
+      ingredients: [],
       price: 0,
-      visible: true,
       isFeatured: false,
       isOnSale: false,
+      salePrice: 1,
+      saleStartDate: undefined,
+      saleEndDate: undefined,
+      stockQuantity: 0,
       isNew: false,
+      visible: true,
       packeding: false,
-      salePrice: 1
+      subCategoryId: undefined,
+      subSubCategoryId: undefined
     },
   })
   //ecoutons les changement de ces champ
-  const [isOnSale, packeding] = form.watch(['isOnSale', 'packeding'])
-  React.useEffect(() => {
-    if (!product) {
-      form.setValue("name", "")
-      form.setValue("visible", true)
-    }
-  }, [product])
+  const [isOnSale, packeding] = form.watch(['isOnSale', 'packeding',])
   // 2. Define a submit handler.
   function onSubmit(values: formSchema) {
+
+    //si nous avons packeding a true, on se rassure bien que subcategoyId et SubSubcategoryId sont bien undefined
+    if (values.packeding) {
+      values.subCategoryId = undefined
+      values.subSubCategoryId = undefined
+    }
+    //on fais pareil pour saleStartDate et saleEndDate et le salePrice si isOnSale est a false
+    if (!values.isOnSale) {
+      values.saleStartDate = undefined
+      values.saleEndDate = undefined
+      values.salePrice = undefined
+    }
+    //on cree une chaine de caractere a partir du tableau d'ingredients
+    const ingredients = values.ingredients.join(",")
+    console.log(values);
     //on recupere le fichier image de la baniere
     const { imageFile, ...data } = values
-    if (!data.isOnSale) {
-      data.salePrice = undefined
-    }
     if (!product) {
       createM.mutate({
-        data: { ...data, ['slug']: slugify(data.name), ['imageUrl']: "" },
+        data: { ...data, ['slug']: slugify(data.name), ['imageUrl']: "", ['ingredients']: ingredients },
         imageFile
       })
     } else {
       updateM.mutate({
-        data: { ...data, ['slug']: slugify(data.name), ['imageUrl']: "" },
+        data: { ...data, ['slug']: slugify(data.name), ['imageUrl']: product.imageUrl, ['ingredients']: ingredients },
         imageFile
       })
     }
-    console.log(values)
   }
   return (
     <Form {...form}>
@@ -126,22 +148,32 @@ export const ProductForm = () => {
           <VisibleField name="packeding" label="Packeding" control={form.control} />
           <VisibleField name="isFeatured" label="Phare" control={form.control} />
           <VisibleField name="isOnSale" label="Promotion" control={form.control} />
+          <VisibleField name="visible" label="Visible" control={form.control} />
         </div>
         <div className="grid lg:grid-cols-2 gap-8">
-          <InputField name="name" control={form.control} label="Nom de la sous-sous-catégorie" placeholder="Entrer le nom de la sous-sous-catégorie" />
+          <InputField name="name" control={form.control} label="Nom du produit" placeholder="Entrer le nom du produit" />
           <TextAreaField name="description" control={form.control} label="Description" placeholder="Entrer une description pour le produit" />
+          <TagsInpute control={form.control} name="ingredients" label="Ingrédients du produit" placeholder="Entrer les ingrédients du produit"/>
           <InputField name="price" control={form.control} label="Prix du produit" type="number" />
           <FileUploader control={form.control} name="imageFile" label="Sélectionner l'image du produit" />
           <InputField name="stockQuantity" control={form.control} label="Quantité en stock" type="number" />
           {!packeding ? <SelectField control={form.control} name="subCategoryId" label="Sous-catégorie" options={subCategories} isPending={subCategoriesisPending} valueKey="id" labelKey="name" placeholder="Sélectionner une sous-catégorie" /> : null}
           {!packeding ? <SelectField control={form.control} name="subSubCategoryId" label="Sous-sous-catégorie" options={subSubCategories} isPending={subSubCategoriesisPending} valueKey="id" labelKey="name" placeholder="Sélectionner une sous-sous-catégorie" /> : null}
           {isOnSale ? <InputField name="salePrice" control={form.control} label="Prix de promotion" type="number" /> : null}
-          {isOnSale ? <DateField name="saleStartDate" control={form.control} label="Date de début de promotion" placeholder="Sélectionner une date" />: null}
-          {isOnSale ? <DateField name="saleEndDate" control={form.control} label="Date de fin de promotion" placeholder="Sélectionner une date" />: null}
+          {isOnSale ? <DateField name="saleStartDate" control={form.control} label="Date de début de promotion" placeholder="Sélectionner une date" /> : null}
+          {isOnSale ? <DateField name="saleEndDate" control={form.control} label="Date de fin de promotion" placeholder="Sélectionner une date" /> : null}
           <div className="flex flex-wrap items-center gap-3">
             <BtnSubmit label={product ? 'Modifier' : 'Créer'} isPending={(createM.isPending || updateM.isPending)} />
             <BtnCancel setVisible={() => setFormVisible(false)} />
-            <Button variant={"outline"} onClick={() => form.reset()} >Rénitialiser</Button>
+            {/* <DropdownMenu>
+              <DropdownMenuTrigger><Button variant={"outline"}>Renitialiser</Button></DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Renitialiser</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Sous catégorie</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => form.resetField("subSubCategoryId")}>Sous sous catégorie</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu> */}
           </div>
         </div>
       </form>

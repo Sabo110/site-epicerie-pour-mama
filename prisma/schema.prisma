@@ -19,6 +19,7 @@ model Category {
   slug      String   @unique // slug unique pour l'URL ou l'identifiant
   name      String   @unique // nom de la catégorie, unique
   visible   Boolean // champ visible 
+  imageUrl String
   createdAt DateTime @default(now()) // date de création, valeur par défaut actuelle
   updatedAt DateTime @updatedAt
 
@@ -30,13 +31,12 @@ model SubCategory {
   slug           String   @unique // slug unique pour l'URL ou l'identifiant
   name           String   @unique // nom de la sous-catégorie, unique
   visible        Boolean // champ visible avec une valeur par défaut de true
-  bannerImageUrl String? // champ optionnel pour l'URL de l'image
   createdAt      DateTime @default(now()) // date de création, valeur par défaut actuelle
   updatedAt      DateTime @updatedAt
 
   // Relation many-to-one avec Category
   categoryId Int
-  category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   // Relation one-to-many avec SubSubCategory
   subSubCategories SubSubCategory[]
@@ -49,13 +49,12 @@ model SubSubCategory {
   slug           String   @unique // slug unique pour l'URL ou l'identifiant
   name           String   @unique // nom de la sous-sous-catégorie, unique
   visible        Boolean // champ visible avec une valeur par défaut de true
-  bannerImageUrl String // champ optionnel pour l'URL de l'image (bannière)
   createdAt      DateTime @default(now()) // date de création, valeur par défaut actuelle
   updatedAt      DateTime @updatedAt
 
   // Relation many-to-one avec SubCategory
   subCategoryId Int
-  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
+  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id], onDelete: Cascade)
 
   products         Product[] 
 }
@@ -65,6 +64,7 @@ model Product {
   name          String    @unique // nom du produit
   slug          String    @unique // slug unique pour l'identifiant dans les URL
   description   String // description optionnelle du produit
+  ingredients   String
   imageUrl      String // URL de l'image principale du produit
   price         Int // prix du produit
   isFeatured    Boolean // pour savoir si le produit est un produit phare
@@ -72,7 +72,7 @@ model Product {
   salePrice     Int? // prix de promotion (optionnel)
   saleStartDate DateTime? // date de début de la promotion (optionnel)
   saleEndDate   DateTime? // date de fin de la promotion (optionnel)
-  stockQuantity Int? // quantité en stock (optionnel)
+  stockQuantity Int // 
   isNew         Boolean // pour savoir si le produit est nouveau
   visible       Boolean // pour indiquer si le produit est visible ou non
   packeding     Boolean
@@ -81,8 +81,8 @@ model Product {
 
   // Relations optionnelles avec SubCategory et SubSubCategory
   subCategoryId    Int?                                                // clé étrangère vers SubCategory
-  subCategory      SubCategory?      @relation(fields: [subCategoryId], references: [id])
+  subCategory      SubCategory?      @relation(fields: [subCategoryId], references: [id], onDelete: Cascade)
 
   subSubCategoryId Int?                                                // clé étrangère vers SubSubCategory
-  subSubCategory   SubSubCategory?   @relation(fields: [subSubCategoryId], references: [id])
+  subSubCategory   SubSubCategory?   @relation(fields: [subSubCategoryId], references: [id], onDelete: Cascade)
 }

@@ -2,7 +2,6 @@ export type CreateSC = {
     name: string
     slug: string
     visible: boolean
-    bannerImageUrl?: string
     categoryId: number
 }
 
@@ -11,7 +10,6 @@ export type SC = {
     name: string
     slug: string
     visible: boolean
-    bannerImageUrl: string | null
     categoryId: number
     createdAt: Date
     updatedAt: Date

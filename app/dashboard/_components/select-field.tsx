@@ -1,3 +1,5 @@
+"use client"
+
 import {
     Select,
     SelectContent,
@@ -17,7 +19,9 @@ import {
 import { Loader } from "./loader";
 
 import { Control, FieldValues, Path } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 //import { BtnLoader } from "../BtnLoader";
+import React from "react";
 
 interface SelectFieldProps<T extends FieldValues> {
     name: Path<T>;
@@ -40,34 +44,36 @@ export function SelectField<T extends FieldValues>({
     placeholder,
     isPending
 }: SelectFieldProps<T>) {
+    const [value, setValue] = React.useState<string | undefined>(undefined)
     return (
         <FormField
             control={control}
             name={name}
             render={({ field }) => (
                 <FormItem>
-                    <FormLabel> {label} </FormLabel>
-                    <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={field.value ? String(field.value): undefined}>
+                    <FormLabel> {label}   </FormLabel>
+                    <Select  onValueChange={(value) => field.onChange(Number(value))} defaultValue={field.value ? String(field.value) : undefined}>
                         <FormControl>
                             <SelectTrigger>
                                 <SelectValue placeholder={placeholder} />
                             </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
-                        <SelectGroup>
-                            {(options && options.length > 0) ?
-                                options.map((item) => (
-                                    <SelectItem value={String(item[valueKey])} key={item[valueKey]} > {item[labelKey]} </SelectItem>
-                                )) : (options && options.length === 0) ?
-                                <SelectLabel>Aucun contenu</SelectLabel> : null
-                            }
-                            {isPending ? <Loader /> : null}
+                        <SelectContent className="pt-8">
+                            <SelectGroup>
+                                {(options && options.length > 0) ?
+                                    options.map((item) => (
+                                        <SelectItem value={String(item[valueKey])} key={item[valueKey]} > {item[labelKey]} </SelectItem>
+                                    )) : (options && options.length === 0) ?
+                                        <SelectLabel>Aucun contenu</SelectLabel> : null
+                                }
+                                {isPending ? <Loader /> : null}
                             </SelectGroup>
                         </SelectContent>
                     </Select>
+                    
                     <FormMessage />
                 </ FormItem>
             )}
         />
-            );
+    );
 }

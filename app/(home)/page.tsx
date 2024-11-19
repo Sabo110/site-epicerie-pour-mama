@@ -1,17 +1,17 @@
 "use client"
 
-import { BannerImage } from "@/components/BannerImage";
-import { SearchBar } from "@/components/SearchBar";
-import banner from "@/public/epiceriebaniere.png"
+import banner from "@/public/bannire.jpg"
 import { getAllP } from "@/actions/product";
 import { useQuery } from "@tanstack/react-query";
 import { Products } from "@/components/Products";
-import { Marketing } from "@/components/Marketing";
+import { Marketing } from "@/app/(home)/_components/Marketing";
 import globe from "@/public/globe-terrestre.png"
 import vert from "@/public/the-vert.png"
+import { Banner } from "./_components/Banner";
+import { ProductsSkeleton } from "./_components/products-skeleton";
 
 export default function Home() {
-  const {data, isPending, error} = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: ['products'],
     queryFn: getAllP
   })
@@ -29,27 +29,29 @@ export default function Home() {
   ]
   return (
     <div>
-      <div className="flex items-center justify-between gap-4">
-        <h1>Logo</h1>
-        <SearchBar className="max-w-[300px] w-full"/>
+      {/* bannire */}
+      <Banner banner={banner} />
+      {/* les nouveautes */}
+      <div className="">
+        <h4 className="">Découvrez nos nouveautés exclusives</h4>
+        {isPending ? <ProductsSkeleton /> : null}
+        {data ? <Products products={data.filter(object => object.isNew === true).slice(0, 10)} /> : null}
       </div>
-      <div className="h-[350px] mt-4">
-        <BannerImage image={banner}/>
-      </div>
+      {/* les produits phares */}
       <div>
-          <h1>Les nouveautes</h1>
-          {data ? <Products products={data.filter(object => object.isNew === true).slice(0, 10)}/> : null}
+        <h4 className="">Les produits phares à ne pas manquer</h4>
+        {isPending ? <ProductsSkeleton /> : null}
+        {data ? <Products products={data.filter(object => object.isFeatured === true).slice(0, 10)} /> : null}
       </div>
+      {/* le marketings */}
       <div>
-        <h1>Nos produits phares</h1>
-        {data ? <Products products={data.filter(object => object.isFeatured === true).slice(0, 10)}/> : null}
-      </div>
-      <div className="grid grid-cols-2 gap-6 w-3/4 mx-auto">
-          {marketingsData.map((object, index) => (
-            <Marketing key={index} object={object}/>
-          ))}
+        <h4 className="">Découvrez des Produits d’Exception pour Sublimer Votre Cuisine</h4>
+        <div className="grid sm:grid-cols-2 gap-3 mx-auto md:w-[600px] lg:w-[700px] xl:w-[800px] sm:w-full">
+          <Marketing object={marketingsData[0]} className="" />
+          <Marketing object={marketingsData[1]} className="" />
+        </div>
       </div>
     </div>
-      
+
   );
 }
