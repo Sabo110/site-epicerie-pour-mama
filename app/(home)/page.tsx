@@ -9,6 +9,7 @@ import globe from "@/public/globe-terrestre.png"
 import vert from "@/public/the-vert.png"
 import { Banner } from "./_components/Banner";
 import { ProductsSkeleton } from "./_components/products-skeleton";
+import { CustomTitle } from "./_components/custom-title";
 
 export default function Home() {
   const { data, isPending, error } = useQuery({
@@ -28,24 +29,39 @@ export default function Home() {
     }
   ]
   return (
-    <div>
+    <div className="space-y-8">
       {/* bannire */}
       <Banner banner={banner} />
       {/* les nouveautes */}
-      <div className="">
-        <h4 className="">Découvrez nos nouveautés exclusives</h4>
+      <div className="space-y-4">
+        <CustomTitle><h5 className="">Découvrez nos nouveautés exclusives</h5></CustomTitle>
+        <p>
+          Explorez notre collection de nouveautés exclusives, spécialement conçues pour répondre à vos besoins.
+          Découvrez des produits innovants, uniques et de haute qualité,
+          parfaits pour enrichir votre quotidien et sublimer votre expérience.
+        </p>
         {isPending ? <ProductsSkeleton /> : null}
-        {data ? <Products products={data.filter(object => object.isNew === true).slice(0, 10)} /> : null}
+        {data ? <Products products={data.filter(object => object.isNew === true && object.visible === true).slice(0, 10)} /> : null}
       </div>
       {/* les produits phares */}
-      <div>
-        <h4 className="">Les produits phares à ne pas manquer</h4>
+      <div className="space-y-4">
+        <CustomTitle><h5 className="">Les produits phares à ne pas manquer</h5></CustomTitle>
+        <p>
+          Découvrez nos produits phares incontournables, sélectionnés pour leur qualité exceptionnelle et
+          leur grande popularité. Ne manquez pas ces best-sellers qui séduisent nos clients par leur fiabilité,
+          leur design et leur performance supérieure.
+        </p>
         {isPending ? <ProductsSkeleton /> : null}
-        {data ? <Products products={data.filter(object => object.isFeatured === true).slice(0, 10)} /> : null}
+        {data ? <Products products={data.filter(object => object.isFeatured === true && object.visible === true).slice(0, 10)} /> : null}
       </div>
       {/* le marketings */}
-      <div>
-        <h4 className="">Découvrez des Produits d’Exception pour Sublimer Votre Cuisine</h4>
+      <div className="space-y-4">
+        <CustomTitle><h5 className="">Découvrez des Produits d’Exception pour Sublimer Votre Cuisine</h5></CustomTitle>
+        <p>
+          Offrez à votre cuisine une touche d'élégance avec nos produits d'exception. Alliant fonctionnalité,
+          design et matériaux haut de gamme, ils sont idéaux pour transformer
+          vos préparations en véritables œuvres d'art culinaires.
+        </p>
         <div className="grid sm:grid-cols-2 gap-3 mx-auto md:w-[600px] lg:w-[700px] xl:w-[800px] sm:w-full">
           <Marketing object={marketingsData[0]} className="" />
           <Marketing object={marketingsData[1]} className="" />

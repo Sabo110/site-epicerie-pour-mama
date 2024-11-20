@@ -14,18 +14,18 @@ export const Footer = () => {
     })
     return (
         <footer className='pt-4 px-4 pb-2'>
-            <Separator className='mb-4' />
+            <Separator className='mb-4 bg-black' />
             <div className='flex flex-wrap gap-y-6 gap-x-14'>
                 <div>
-                    <h5>Contact</h5>
+                    <h6>Contact</h6>
                     <p><a href="" className='hover:underline'>+237 659182723</a></p>
                     <p><a href="" className='hover:underline'>vivmba@yahoo.fr</a></p>
                     <p><a href="" className='hover:underline'>vivifacebookpage</a></p>
                 </div>
                 <div>
-                    <h5>Produits</h5>
+                    <h6>Produits</h6>
                     <ul className='space-y-2'>
-                        {data?.slice(0, 10).map(p => (
+                        {data?.filter(po => po.visible === true).slice(0, 10).map(p => (
                             <li key={p.id}><Link href={"/produit/" + p.slug} className='hover:underline'> {p.name} </Link></li>
                         ))}
                         {

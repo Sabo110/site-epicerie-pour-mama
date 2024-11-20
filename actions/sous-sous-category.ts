@@ -29,9 +29,6 @@ export async function getAllSSC() {
             orderBy: {
                 createdAt: 'desc'
             },
-            where: {
-                visible: true
-            }
         })
         return result
     } catch (error) {

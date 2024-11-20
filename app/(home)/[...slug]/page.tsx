@@ -12,6 +12,7 @@ import { getOC } from '@/actions/category'
 import { Banner } from '../_components/Banner'
 import { ProductsSkeleton } from '../_components/products-skeleton'
 import { Products } from '@/components/Products'
+import { CustomTitle } from '../_components/custom-title'
 
 export default function page() {
     const baseUrl = "https://res.cloudinary.com/dilxbtgss/image/upload/v1731642136/"
@@ -44,15 +45,15 @@ export default function page() {
             {categoryQuery.data ? <Banner banner={baseUrl + categoryQuery.data.imageUrl} /> : null}
             {/* le skeleton du nom de la sous categorie ou sous-sous categorie et sous categorie ou sous sous categorie */}
             {(subCategoryQuery.isPending && subSubCategoryQuery.isPending) ? <Skeleton className='sm: w-1/2 mx-auto h-5' /> : null}
-            {subCategoryQuery.data ? <h4> {subCategoryQuery.data.name} </h4> : subSubCategoryQuery.data ? <h4> {subSubCategoryQuery.data.name} </h4> : null}
+            {subCategoryQuery.data ? <CustomTitle><h5> {subCategoryQuery.data.name} </h5></CustomTitle> : subSubCategoryQuery.data ? <CustomTitle><h5> {subSubCategoryQuery.data.name} </h5></CustomTitle> : null}
             {/* skeleon de produits */}
             {(subCategoryQuery.isPending && subSubCategoryQuery.isPending) ? <ProductsSkeleton /> : null}
             {/* produits */}
             {
                 subCategoryQuery.data ?
-                    <Products products={subCategoryQuery.data.products.filter(item => item.slug !== subSubCategorySlug)} />
+                    <Products products={subCategoryQuery.data.products.filter(item => item.visible === true)} />
                     : subSubCategoryQuery.data ?
-                        <Products products={subSubCategoryQuery.data.products.filter(item => item.slug !== subSubCategorySlug)} /> :
+                        <Products products={subSubCategoryQuery.data.products.filter(item => item.visible === true)} /> :
                         null
             }
         </div>

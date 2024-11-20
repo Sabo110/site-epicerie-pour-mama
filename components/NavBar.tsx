@@ -15,6 +15,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { getAllC } from '@/actions/category'
 import Link from 'next/link'
+import { Skeleton } from './ui/skeleton'
 
 export const NavBar = () => {
     const { data, isPending, error } = useQuery({
@@ -22,17 +23,19 @@ export const NavBar = () => {
         queryFn: getAllC
     })
     return (
+        <>
+        {isPending ? <Skeleton className='w-full h-12'/> : null}
         <NavigationMenu className=''>
             <div className='w-full'>
                 <NavigationMenuList className=''>
                     <div className='w-full flex overflow-x-auto'>
-                        {data?.map(category => (
+                        {data?.filter(c => c.visible === true).map(category => (
                             <NavigationMenuItem key={category.id}>
                                 <NavigationMenuTrigger className='capitalize'> {category.name} </NavigationMenuTrigger>
                                 <NavigationMenuContent>
                                     {/* les sous categories de la categorie */}
                                     <div className='min-h-[300px] lg:min-w-[1000px] xl:w-[1080px] w-[300px] flex flex-wrap gap-[30px] p-4'>
-                                        {category.subCategories.map(subCategory => (
+                                        {category.subCategories.filter(sc => sc.visible === true).map(subCategory => (
                                             <div key={subCategory.id} className=''>
 
                                                 {
@@ -44,7 +47,7 @@ export const NavBar = () => {
 
                                                 {/* les sous sous categories */}
                                                 <ul className='mt-2'>
-                                                    {subCategory.subSubCategories.map(subSubCategory => (
+                                                    {subCategory.subSubCategories.filter(ssc => ssc.visible === true).map(subSubCategory => (
                                                         <li key={subSubCategory.id}>
                                                             <Link href={"/" + category.slug + "/" + subCategory.slug + "/" + subSubCategory.slug} className='hover:underline'>
                                                                 <small>{subSubCategory.name}</small>
@@ -63,14 +66,8 @@ export const NavBar = () => {
                 </NavigationMenuList>
             </div>
         </NavigationMenu>
+        </>
     )
 }
 
-
-
-export const NavBarMobile = () => {
-    return (
-        <div>NavBar</div>
-    )
-}
 

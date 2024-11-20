@@ -49,9 +49,6 @@ export async function getAllC() {
             orderBy: {
                 createdAt: 'desc'
             },
-            where: {
-                visible: true
-            },
             include: {
                 subCategories: {
                     include: {

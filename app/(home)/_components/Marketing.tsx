@@ -14,7 +14,7 @@ type Props = {
 }
 export const Marketing = ({ object,className }: Props) => {
   return (
-    <div className={cn('space-y-2 p-4 border-2 border-dashed rounded-t-3xl', className)}>
+    <div className={cn('space-y-2 p-4 border border-dashed rounded-t-3xl border-black', className)}>
       <div className='w-[40px] h-[40px] mx-auto'>
         <Image 
           src={object.icon}

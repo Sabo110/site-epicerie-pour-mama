@@ -44,9 +44,6 @@ export async function getAllP() {
             orderBy: {
                 createdAt: 'desc'
             },
-            where: {
-                visible: true
-            },
             include: {
                 subCategory: {
                     include: {
