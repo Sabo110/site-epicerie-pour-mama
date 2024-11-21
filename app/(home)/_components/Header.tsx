@@ -13,7 +13,7 @@ export const Header = () => {
   const isMobile = useIsMobile()
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
+      <div className="flex flex-col md:flex-row  justify-between md:items-center gap-4 mb-3">
         <div className="w-[200px] h-[50px]">
           <Link href={"/"}>
           <Image
