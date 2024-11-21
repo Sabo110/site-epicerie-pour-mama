@@ -27,7 +27,7 @@ export default function page() {
         {formVisible ? <ProductForm /> : null}
       </div>
       <div>
-        {(data && !formVisible) ? <DataTable columns={columns} data={data} /> : null}
+        {(data && !formVisible) ? <DataTable columns={columns} data={data} columnFilter='name' /> : null}
       </div>
     </div>
   )

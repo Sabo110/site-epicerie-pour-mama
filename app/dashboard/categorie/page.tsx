@@ -27,7 +27,7 @@ export default function Category() {
         {categoryFormIsVisible ? <CategoryForm /> : null}
       </div>
       <div>
-        {(data && !categoryFormIsVisible) ? <DataTable columns={columns} data={data} /> : null}
+        {(data && !categoryFormIsVisible) ? <DataTable columns={columns} data={data} columnFilter='name' /> : null}
       </div>
     </div>
   )

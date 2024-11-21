@@ -29,7 +29,7 @@ export default function page() {
             {formVisible ? <SubCategoryForm /> : null}
          </div>
          <div>
-          {(data && !formVisible) ? <DataTable data={data} columns={columns} /> : null}
+          {(data && !formVisible) ? <DataTable data={data} columns={columns} columnFilter='name'/> : null}
          </div>
     </div>
   )
