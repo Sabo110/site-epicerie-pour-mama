@@ -26,7 +26,7 @@ export async function createP(data: CreateP, imageFile: File) {
             //on supprime l'image telecharge
             await deleteImage(pi)
             console.log("cue");
-            
+
         }
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002") {
@@ -142,7 +142,7 @@ export async function getOP(slug: string) {
                     include: {
                         products: {
                             include: {
-                                subCategory:true,
+                                subCategory: true,
                                 subSubCategory: true
                             }
                         },
@@ -153,7 +153,7 @@ export async function getOP(slug: string) {
                     include: {
                         products: {
                             include: {
-                                subCategory:true,
+                                subCategory: true,
                                 subSubCategory: true
                             }
                         },
@@ -164,6 +164,27 @@ export async function getOP(slug: string) {
                         }
                     }
                 }
+            }
+        })
+        return result
+    } catch (error) {
+        throw new Error('Erreur interne du serveur')
+    }
+}
+
+//recherche d'un produit a partir d'un nom en ignorant la casse
+export async function searchP(name: string) {
+    try {
+        const result = await prisma.product.findMany({
+            where: {
+                name: {
+                    contains: name,
+                    mode: 'insensitive' //pour ignorer la case
+                }
+            },
+            include: {
+                subCategory: true,
+                subSubCategory: true
             }
         })
         return result

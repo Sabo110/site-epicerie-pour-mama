@@ -28,7 +28,7 @@ export default function page() {
         queryFn: () => getOP(productSlug)
     })
     return (
-        <div>
+        <div className='space-y-8'>
             {/* skeleton et baniiere */}
             {productQuery.isPending ? <Skeleton className='w-full md:h-[350px] h-[200px]' /> : null}
             {productQuery.data ?

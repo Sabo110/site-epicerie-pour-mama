@@ -52,7 +52,8 @@ export async function getAllC() {
             include: {
                 subCategories: {
                     include: {
-                        subSubCategories: true
+                        subSubCategories: true,
+                        products: true
                     }
                 }
             }
@@ -122,6 +123,28 @@ export async function getOC(slug: string) {
         const result = await prisma.category.findUniqueOrThrow({
             where: {
                 slug
+            },
+            include: {
+                subCategories: {
+                    include: {
+                        subSubCategories: {
+                            include: {
+                                products: {
+                                    include: {
+                                        subCategory: true,
+                                        subSubCategory: true
+                                    }
+                                }
+                            }
+                        },
+                        products: {
+                            include: {
+                                subCategory: true,
+                                subSubCategory: true
+                            }
+                        }
+                    }
+                }
             }
         })
         return result

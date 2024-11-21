@@ -43,6 +43,7 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -83,12 +84,18 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-transform: capitalize;
 }
 
@@ -128,6 +135,7 @@ p {
   font-size: 1rem;
   font-weight: 400;
 }
+
 span {
   font-weight: 700;
 }
@@ -135,8 +143,15 @@ span {
 small {
   font-size: 0.875rem;
   font-weight: 400;
-  color: #666; /* Couleur plus discrète */
+  color: #666;
+  /* Couleur plus discrète */
 }
-@media (max-width: 1023px) {
-  
+
+.cata {
+  background: rgba(255, 255, 255, 0.8);
+  /* Couleur entièrement transparente */
+  backdrop-filter: blur(1px);
+  /* Flou de 10 pixels */
+  -webkit-backdrop-filter: blur(1px);
+  /* Compatibilité Safari */
 }

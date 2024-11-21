@@ -67,3 +67,15 @@ export const useProduct = create<product>((set) => ({
   product: undefined,
   setProduct: (product) => set({ product })
 }))
+
+//le store qui servira d'ecouter la valeur du champ input pour pouvoir rechercher un produit a partir de son nom
+type SearchP = {
+  name: string
+  setName: (name: string) => void
+}
+
+
+export const useSearchP = create<SearchP>((set) => ({
+  name: "",
+  setName: (name) => set({name})
+}))
