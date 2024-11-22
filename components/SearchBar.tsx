@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { cn } from '@/lib/utils'
 import { Search } from 'lucide-react';
 import { useSearchP } from '@/app/store';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 
 
 type Props = {
