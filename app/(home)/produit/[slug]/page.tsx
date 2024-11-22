@@ -7,7 +7,6 @@ import { getOP } from '@/actions/product'
 import banner from "@/public/epiceriebaniere.png"
 import { Skeleton } from "@/components/ui/skeleton"
 import Image from 'next/image'
-import { Product } from '@/components/Product'
 import { cn } from '@/lib/utils'
 import { isBefore, isAfter, isEqual } from "date-fns";
 import { calculateDaysRemaining } from '@/lib/calculateDaysRemaining'
@@ -15,6 +14,7 @@ import { Banner } from '../../_components/Banner'
 import { ProductsSkeleton } from '../../_components/products-skeleton'
 import { Products } from '@/components/Products'
 import { CustomTitle } from '../../_components/custom-title'
+import { Error } from '../../_components/error'
 
 
 export default function page() {
@@ -28,7 +28,7 @@ export default function page() {
         queryFn: () => getOP(productSlug)
     })
     return (
-        <div className='space-y-8'>
+        <div className=''>
             {/* skeleton et baniiere */}
             {productQuery.isPending ? <Skeleton className='w-full md:h-[350px] h-[200px]' /> : null}
             {productQuery.data ?
@@ -40,7 +40,7 @@ export default function page() {
                 : null
             }
             {/* skelelon etle nom de la sous categorie ou de la sous sous categorie */}
-            {productQuery.isPending ? <Skeleton className='w-full h-4' /> : null}
+            {productQuery.isPending ? <Skeleton className='w-full h-4 my-2' /> : null}
             {
                 productQuery.data ?
                     <CustomTitle>
@@ -50,15 +50,17 @@ export default function page() {
                     </CustomTitle> :
                     null
             }
+            {/* si nous avons une erreur lors de la recuperaion du produit */}
+            {productQuery.error ? <Error fn={productQuery.refetch}/> : null}
             {/* skeleton , l'image du produit, la description le prix et ingredients */}
-            <div className='grid md:grid-cols-2 gap-x-[100px] gap-y-[20px] gap-3'>
+            <div className='grid md:grid-cols-2 gap-x-[100px] gap-y-[20px] gap-3 my-4'>
                 {/* skeleton image et image meme */}
                 {productQuery.isPending ? <Skeleton className='md:w-48 md:h-48 h-32 w-32 rounded-full' /> : null}
                 {
                     productQuery.data ?
                         <div className='space-y-4'>
                             <div className='md:w-48 md:h-48 h-36 w-36'>
-                                <Image src={baseUrl + productQuery.data.imageUrl} alt='image du produit' width={100} height={100} className='object-fill w-full h-full rounded-full' />
+                                <Image src={baseUrl + productQuery.data.imageUrl} alt='image du produit' width={250} height={250} className='object-fill w-full h-full rounded-full' />
                             </div>
                             <div>
                                 <h6>Ingrédients:</h6>
@@ -70,8 +72,8 @@ export default function page() {
                 {/* skeleton description et description */}
                 {
                     productQuery.isPending ?
-                        <div className='md:w-[400px] md:h-[200px] w-full h-[150px] space-y-1'>
-                            <div className='h-full space-y-1'>
+                        <div className='md:w-[400px] md:h-[200px] w-full h-[150px]'>
+                            <div className='h-full flex flex-col gap-1'>
                                 <Skeleton className='w-full h-1/6' />
                                 <Skeleton className='w-5/6 h-1/6 ms-auto' />
                                 <Skeleton className='w-4/6 h-1/6 ms-auto' />
@@ -107,10 +109,13 @@ export default function page() {
                         </div> : null
                 }
             </div>
+            
             {/* les produits de la meme sous categorie ou sous sous categorie */}
             <CustomTitle>
                 <h5 className=''>Produits Similaires à Découvrir</h5>
             </CustomTitle>
+            {/* si nous avons une erreur lors de la recuperaion du produit */}
+            {productQuery.error ? <Error fn={productQuery.refetch}/> : null}
             {/* affichage du skeleton */}
             {
                 productQuery.isPending ?

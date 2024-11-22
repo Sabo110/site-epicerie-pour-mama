@@ -5,7 +5,7 @@ import { BannerImage } from './BannerImage'
 import { P } from '@/types/product'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'nextjs-toploader/app';
 import { Button } from './ui/button'
 import { cn } from '@/lib/utils'
 
@@ -18,7 +18,7 @@ export const Product = ({ product }: Props) => {
     return (
         <div className=''>
             <div className='md:w-44 md:h-44 sm:w-40 sm:h-40 w-36 h-36 mx-auto'>
-                <Image src={baseUrl + product.imageUrl} alt='image du produit' width={100} height={100} className='object-fill w-full h-full rounded-full' />
+                <Image src={baseUrl + product.imageUrl} alt='image du produit' width={250} height={250} className='object-fill w-full h-full rounded-full' />
             </div>
             <div className='text-center mt-2 space-y-2'>
                 <p> {product.name} </p>

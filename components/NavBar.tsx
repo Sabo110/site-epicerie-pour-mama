@@ -24,7 +24,7 @@ export const NavBar = () => {
     })
     return (
         <>
-            {isPending ? <Skeleton className='w-full h-12' /> : null}
+            {isPending ? <Skeleton className='w-full h-12 mb-3' /> : null}
             <NavigationMenu className=''>
                 <div className='w-full'>
                     <NavigationMenuList className=''>

@@ -5,7 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 export const ProductsSkeleton = () => {
     const tab = [1, 2, 3, 4, 5]
     return (
-        <div className='grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 sm:grid-cols-3 grid-cols-2 sm:gap-14 gap-10 mb-[50px]'>
+        <div className='grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 sm:grid-cols-3 grid-cols-2 sm:gap-14 gap-10 mb-[50px] mt-3'>
             {Array.from({length: 5 }, (_, index) => `Item ${index}`).map((value, index) => (
             <div className='space-y-2 md:h-[250px] lg:h-[200px]' key={index}>
                 <Skeleton className='md:w-48 md:h-48 sm:w-40 sm:h-40 h-32 w-32 rounded-full mx-auto' />

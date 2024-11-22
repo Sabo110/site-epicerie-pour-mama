@@ -14,7 +14,7 @@ type Props = {
 export const Banner = ({ banner }: Props) => {
 
   return (
-    <div className="md:h-[350px] h-[200px] mt-4 relative">
+    <div className="md:h-[350px] h-[200px] mt-4 relative mb-4">
       <Image src={banner} alt='image de bannière' width={1080} height={350} className="h-full w-full object-cover"/>
     </div>
   )

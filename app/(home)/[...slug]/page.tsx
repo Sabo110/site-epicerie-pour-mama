@@ -13,6 +13,7 @@ import { Products } from '@/components/Products'
 import { CustomTitle } from '../_components/custom-title'
 import { BannerSkeleton } from '@/components/bannerSkeleton'
 import { BanSkeleton } from '../_components/banner-skeleton'
+import { Error } from '../_components/error'
 
 export default function page() {
     const baseUrl = "https://res.cloudinary.com/dilxbtgss/image/upload/v1731642136/"
@@ -88,7 +89,8 @@ export default function page() {
 
         //     }
         // </div>
-        <div className='space-y-8'>
+        <div className=''>
+            {categoryQuery.error ? <Error  fn={categoryQuery.refetch}/> : null}
             {/* affichage skeleton de la bannire la banniere */}
                 {
                     categoryQuery.isPending ? <BanSkeleton /> : null
@@ -101,7 +103,7 @@ export default function page() {
                 }
             {/* affichage du skeleton pour le nom de la sous categorie ou sous sous categorie */}
             {
-                categoryQuery.isPending ? <Skeleton className='h-8 w-full'/> : null
+                categoryQuery.isPending ? <Skeleton className='h-8 w-full mb-3'/> : null
 
             }
             {/* premier cas nous n'avons que le slug d'une categorie fournit */}
@@ -112,12 +114,12 @@ export default function page() {
                     categoryQuery.data && !subCategorySlug && !subSubCategorySlug ?
                     categoryQuery.data?.subCategories.filter(sc => sc.visible === true).map(sc => (
                         sc.products.length > 0 ? 
-                        <div key={sc.id} className='space-y-6'>
+                        <div key={sc.id} className='space-y-6 mb-8'>
                             <CustomTitle><h5> {sc.name} </h5></CustomTitle>
                             <Products products={sc.products.filter(p => p.visible === true)}/>
                         </div>:
                         sc.subSubCategories.filter(ssc => ssc.visible === true).map(ssc => (
-                            <div key={ssc.id} className='space-y-6'>
+                            <div key={ssc.id} className='space-y-6 mb-8'>
                                 <CustomTitle><h5> {ssc.name} </h5></CustomTitle>
                                 <Products products={ssc.products.filter(p => p.visible === true)}/>
                             </div>

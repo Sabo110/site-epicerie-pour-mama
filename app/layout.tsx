@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ReactQueryProvider } from "@/lib/ReactQueryProvider";
 import { Toaster } from 'sonner';
+import NextTopLoader from 'nextjs-toploader';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,6 +37,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${lora.variable} antialiased`}
       >
         <ReactQueryProvider>
+          <NextTopLoader color="#000000" height={3} showSpinner={false}/>
           {children}
           <Toaster position="top-center" richColors={true} />
         </ReactQueryProvider>
