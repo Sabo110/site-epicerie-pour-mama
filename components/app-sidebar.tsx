@@ -25,6 +25,9 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import Image from "next/image"
+import logo from "@/public/logo.png"
+import { useRouter } from 'nextjs-toploader/app';
 
 // This is sample data.
 const data = {
@@ -98,10 +101,21 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const router = useRouter()
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        {/* <TeamSwitcher teams={data.teams} /> */}
+          <Image
+            src={logo}
+            alt="logo" 
+            className="cursor-pointer"
+            onClick={() => {
+              document.getElementById("btn-dsh")?.click()
+              router.push("/dashboard")
+            }}
+            />
+        
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

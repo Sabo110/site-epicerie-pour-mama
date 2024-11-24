@@ -4,6 +4,7 @@ import "./globals.css";
 import { ReactQueryProvider } from "@/lib/ReactQueryProvider";
 import { Toaster } from 'sonner';
 import NextTopLoader from 'nextjs-toploader';
+import {ClerkProvider,} from '@clerk/nextjs'
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,16 +33,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${lora.variable} antialiased`}
-      >
-        <ReactQueryProvider>
-          <NextTopLoader color="#000000" height={3} showSpinner={false}/>
-          {children}
-          <Toaster position="top-center" richColors={true} />
-        </ReactQueryProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} ${lora.variable} antialiased`}
+        >
+          <ReactQueryProvider>
+            <NextTopLoader color="#000000" height={3} showSpinner={false} />
+            {children}
+            <Toaster position="top-center" richColors={true} />
+          </ReactQueryProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
