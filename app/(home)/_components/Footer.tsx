@@ -6,6 +6,9 @@ import { getAllP } from '@/actions/product'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
+import Image from 'next/image'
+import logo from "@/public/logo.png"
+import flowers from "@/public/flowers.png"
 
 export const Footer = () => {
     const { data, isPending, error } = useQuery({
@@ -13,8 +16,13 @@ export const Footer = () => {
         queryFn: getAllP
     })
     return (
-        <footer className='pt-4 px-4 pb-2'>
-            <Separator className='mb-4 bg-black' />
+        <footer className='pt-4 px-4 pb-2 bg-gray-100 text-gray-800 z-10'>
+            <div className='flex items-center justify-center gap-6'>
+                <Image src={flowers} alt='logo' className='w-[30px] h-[30px]' />
+                <Link href={"/"}><Image src={logo} alt='logo' className='cursor-pointer my-4' /></Link>
+                <Image src={flowers} alt='logo' className='w-[30px] h-[30px]' />
+            </div>
+            <Separator className='mb-4 bg-gray-800' />
             <div className='flex flex-wrap gap-y-6 gap-x-14'>
                 <div>
                     <h6>Contact</h6>
@@ -30,11 +38,11 @@ export const Footer = () => {
                         ))}
                         {
                             isPending ?
-                                    Array.from({ length: 10 }).map((_, index) => (
-                                        <li key={index}>
-                                            <Skeleton className='w-[150px] h-2'/>
-                                        </li>
-                                      )) : null
+                                Array.from({ length: 10 }).map((_, index) => (
+                                    <li key={index}>
+                                        <Skeleton className='w-[150px] h-2' />
+                                    </li>
+                                )) : null
                         }
                     </ul>
                 </div>
