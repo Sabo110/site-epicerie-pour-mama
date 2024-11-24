@@ -12,17 +12,17 @@ type Props = {
   }
   className?: string
 }
-export const Marketing = ({ object,className }: Props) => {
+export const Marketing = ({ object, className }: Props) => {
   return (
-    <div className={cn('space-y-2 p-4 border border-dashed rounded-t-3xl border-black', className)}>
+    <div className={cn('space-y-2 p-4', className)}>
       <div className='w-[40px] h-[40px] mx-auto'>
-        <Image 
+        <Image
           src={object.icon}
           alt='icone'
           className='object-cover h-full w-full'
         />
       </div>
-      <h6 className='text-center'> {object.title} </h6>
+      <h1 className='text-center'> {object.title} </h1>
       <p className='text-start'>
         {object.text}
       </p>

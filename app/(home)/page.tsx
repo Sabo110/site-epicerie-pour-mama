@@ -59,15 +59,15 @@ export default function Home() {
       </div>
       {/* le marketings */}
       <div className="space-y-4">
-        <CustomTitle><h5 className="">Découvrez des Produits d’Exception pour Sublimer Votre Cuisine</h5></CustomTitle>
+        <h5 className="">Découvrez des Produits d’Exception pour Sublimer Votre Cuisine</h5>
         <p>
           Offrez à votre cuisine une touche d'élégance avec nos produits d'exception. Alliant fonctionnalité,
           design et matériaux haut de gamme, ils sont idéaux pour transformer
           vos préparations en véritables œuvres d'art culinaires.
         </p>
         <div className="grid sm:grid-cols-2 gap-3 mx-auto md:w-[600px] lg:w-[700px] xl:w-[800px] sm:w-full">
-          <Marketing object={marketingsData[0]} className="" />
-          <Marketing object={marketingsData[1]} className="" />
+          <Marketing object={marketingsData[0]} className="md:bg-orange-200 bg-orange-300" />
+          <Marketing object={marketingsData[1]} className="md:bg-red-200 bg-red-300" />
         </div>
       </div>
     </div>
